@@ -5,6 +5,12 @@ Filepath for aircraft data on Pi is
 
     /run/dump1090-fa/aircraft.json
 
+The JSON feed to the server (on raspberry pi) is localhost:8080/data/aircraft.json
+
+will need to update IP occasionally?? in pi terminal: 
+    ip address show
+to access from pc http://192.168.1.65:8080/data/aircraft.json
+
 ## Getting Started
 
 First, run the development server:

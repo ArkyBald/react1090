@@ -15,5 +15,5 @@ export default function Clock() {
         return () => clearInterval(interval);
     }, []);
 
-    return (<h1 className="max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">{time.toLocaleTimeString()}</h1>)
+    return (<h1 suppressHydrationWarning className="max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">{time.toLocaleTimeString()}</h1>)
 }
