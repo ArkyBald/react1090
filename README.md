@@ -7,6 +7,31 @@ Filepath for aircraft data on Pi is
 
 The JSON feed to the server (on raspberry pi) is localhost:8080/data/aircraft.json
 
+{
+      hex: 'c821f8',
+      alt_baro: 5950,
+      alt_geom: 5975,
+      gs: 258.6,
+      track: 244.8,
+      baro_rate: -1344,
+      squawk: '5607',
+      lat: -46.484756,
+      lon: 168.323945,
+      nic: 8,
+      rc: 186,
+      seen_pos: 0.7,
+      version: 0,
+      nac_p: 8,
+      nac_v: 0,
+      sil: 2,
+      sil_type: 'unknown',
+      mlat: [],
+      tisb: [],
+      messages: 19,
+      seen: 0.3,
+      rssi: -37.5
+    }
+
 will need to update IP occasionally?? in pi terminal: 
     ip address show
 to access from pc http://192.168.1.65:8080/data/aircraft.json
