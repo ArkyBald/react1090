@@ -1,5 +1,12 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+
+## Installing ReadSB
+Installed Via : https://github.com/wiedehopf/adsb-scripts/wiki/Automatic-installation-for-readsb (uninstalled Dump1090-Fa Automatically)
+
+
+
+
 ## Personal Note
 Filepath for aircraft data on Pi is 
 
