@@ -1,12 +1,11 @@
 "use server";
 
 import AircraftInfo from "@/components/aircraftInfo";
-import Clock from "@/components/clock";
 import { AircraftDataType } from "@/functions/types";
 import { Suspense } from "react";
 
 export async function getAircraft() {
-  const data = await fetch("http://192.168.200.100:8080/tar1090/data/aircraft.json");
+  const data = await fetch("http://192.168.200.100/tar1090/data/aircraft.json");
   const jsonData  = await data.json() as {now: number; messages: number; aircraft: []};
  
   const test = 
@@ -55,16 +54,11 @@ export async function getAircraft() {
 
 export default async function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-full flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-center sm:text-left">
-          <Clock />
-        </div>
+      <main className="h-full min-h-screen w-full max-w-full items-center place-content-center-safe scroll-py-16 px-8 bg-white dark:bg-black">
         <Suspense fallback={<div>Loading...</div>}>
           <AircraftInfo/>
         </Suspense>
         
       </main>
-    </div>
   );
 }

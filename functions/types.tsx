@@ -103,4 +103,14 @@ export type AircraftDataType = {
     oat?: number,
     /** total air temperature */
     tat?: number,
+    /** distance from the receiver, as calculated at the receiver */
+    dist?: number,
+    /** the shortened type of the aircraft, as looked up from the hex code */
+    stype?: string,
+    /** the long type of the aircraft, as looked up from the hex code */
+    ltype?: string,
+    /** the year of manufacture of the aircraft, as looked up from the hex code */
+    yom?: number,
+    /** the operator of the aircraft, as looked up from the hex code */
+    operator?: string,
 }

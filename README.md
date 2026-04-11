@@ -43,6 +43,9 @@ will need to update IP occasionally?? in pi terminal:
     ip address show
 to access from pc http://192.168.1.65:8080/data/aircraft.json
 
+
+must update readsb defaults to include --db-file /home/archie/Documents/aircraft.csv.gz --db-file-lt
+
 AI instructions for building raspberry pi
 Building a Next.js application for a Raspberry Pi kiosk involves two main phases:
 deploying the Next.js app to the Pi and configuring the Pi to run a web browser in full-screen kiosk mode on boot. 
