@@ -3,7 +3,7 @@
 import { getAircraft } from "@/app/page";
 import { ADSBDataType, AircraftDataType } from "@/functions/types";
 import { useEffect, useState } from "react";
-import Clock from "./clock";
+import MapScreen from "./mapScreen";
 import Papa from "papaparse";
 // import aircraftCSV from "../data/aircraft.csv";
 
@@ -12,10 +12,10 @@ function updateFromPartial<T>(oldData: T, newData: Partial<T>): T {
 }
 
 
-const receiverLocation = {
-    lat: -45.02363586425781, // Goldleaf Hill
-    lon: 168.6907501220703,
-};
+export const receiverLocation = {
+    queenstown: {lat: -45.02363586425781, lon: 168.6907501220703},
+    crawford: {lat: -46.40049743652344, lon: 168.37973022460938, bearing : 314}
+}.crawford;
 
 const aircraftCSV = await fetch("/aircraft.csv");
 const aircraftParsedCSV = Papa.parse(await aircraftCSV.text(), { header: false }).data;
@@ -40,16 +40,43 @@ export default function AircraftInfo(){
 
     const [primaryAircraft, setPrimaryAircraft] = useState(undefined as AircraftDataType | undefined);
 
-    // const [storedAircraftData, setStoredAircraftData] = useState({now: new Date(), messages: 0, aircraft: []});
+    const [testAircraftData, setTestAircraftData] = useState({now: new Date(), messages: 1, aircraft: 
+        {c82af1 : {
+            hex: 'c82af1',
+            flight: 'ZKIDH   ',
+            alt_baro: 3625,
+            alt_geom: 3625,
+            gs: 123.3,
+            track: 0,
+            baro_rate: 0,
+            squawk: '1500',
+            category: 'A7',
+            lat: -46.40049743652344, 
+            lon: 168.37973022460938,
+            nic: 8,
+            rc: 186,
+            seen_pos: 47.5,
+            version: 2,
+            nic_baro: 1,
+            nac_p: 9,
+            nac_v: 2,
+            sil: 3,
+            sil_type: 'perhour',
+            gva: 2,
+            sda: 2,
+            mlat: [],
+            tisb: [],
+            messages: 407,
+            seen: 41.6,
+            rssi: -36.4} as AircraftDataType
+        }} as ADSBDataType);
+
 
     useEffect(() => {
         const id = setTimeout(() => {
             getAircraft().then((data : {now: number; messages: number; aircraft: AircraftDataType[]}) => {
                 var newAircraftData : ADSBDataType = {now : new Date(data.now * 1000), messages: data.messages, aircraft: {}};
                 // Note this automatically prunes the list based on the Seen limit set on ReadSB
-
-
-                // console.log(newAircraftData);
 
                 for (let i = 0; i < data.aircraft.length; i++) {
                     const aircraft = data.aircraft[i];
@@ -88,9 +115,9 @@ export default function AircraftInfo(){
 
     return (
         <div>
-            {Object.keys(storedAircraftData.aircraft).length <= 0 ? 
+            {Object.keys(storedAircraftData.aircraft).length <= 2 ? // FIXME - this is set temporarily to work on the map screen, but should be changed back to 0 or 1 for production
             <div className="flex flex-row items-center justify-center bg-zinc-50 dark:bg-black">
-                <Clock />
+                <MapScreen aircraftData={storedAircraftData}/>
             </div>  
             
             :

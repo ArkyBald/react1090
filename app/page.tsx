@@ -5,7 +5,7 @@ import { AircraftDataType } from "@/functions/types";
 import { Suspense } from "react";
 
 export async function getAircraft() {
-  const data = await fetch("http://192.168.200.100/tar1090/data/aircraft.json");
+  const data = await fetch("http://192.168.1.33/tar1090/data/aircraft.json");
   const jsonData  = await data.json() as {now: number; messages: number; aircraft: []};
  
   const test = 
@@ -23,8 +23,8 @@ export async function getAircraft() {
         baro_rate: 0,
         squawk: '1500',
         category: 'A7',
-        lat: -46.393524,
-        lon: 168.538848,
+        lat: -46.40049743652344, 
+        lon: 168.37973022460938,
         nic: 8,
         rc: 186,
         seen_pos: 47.5,
