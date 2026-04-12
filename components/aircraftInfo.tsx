@@ -25,7 +25,7 @@ function findAircraftInfo(hex: string) : {registration?: string , stype?: string
     const aircraftDetails : string[][] = aircraftParsedCSV.filter((row : string[], index: number, array: string[][]) => row[0] == hex.toLocaleUpperCase());
     console.log(aircraftDetails);
     if (aircraftDetails.length > 0) {
-        return {registration: aircraftDetails[0][1], stype: aircraftDetails[0][2], ltype: aircraftDetails[0][4], yom: parseInt(aircraftDetails[0][5]), operator: aircraftDetails[0][6]};
+        return {registration: aircraftDetails[0][1], stype: aircraftDetails[0][2], ltype: aircraftDetails[0][4], yom: aircraftDetails[0][5] ? parseInt(aircraftDetails[0][5]) : undefined, operator: aircraftDetails[0][6]};
     }
     else {
         return {};
@@ -55,7 +55,7 @@ export default function AircraftInfo(){
                     const aircraft = data.aircraft[i];
 
                     if (aircraft.hex === undefined) continue;
-                    // if (aircraft.alt_baro === 'ground') continue;
+                    if (aircraft.alt_baro === 'ground') continue;
 
                     if (!(aircraft.hex as string in storedAircraftData.aircraft)) {
                         newAircraftData.aircraft[aircraft.hex as string] = aircraft;
@@ -97,9 +97,13 @@ export default function AircraftInfo(){
             
             <div  className="flex-col">
                 <div className="flex flex-row items-center justify-left bg-zinc-50 dark:bg-black">
-                    {/* <p>Number of Aircraft: {Object.keys(storedAircraftData.aircraft).length}</p>  */}
-                    <p className="flex-1 text-[10vw] text-right">{primaryAircraft?.flight}</p>
-                    <div className="flex flex-1 flex-row text-left">
+                    <div className="flex flex-1 flex-col justify-baseline gap-0 leading-none">                    
+                        <p className="flex-1 text-[10vw] text-right">{primaryAircraft?.flight == "@@@@@@@@" ? primaryAircraft.registration : primaryAircraft?.flight}</p>
+                        {primaryAircraft?.ltype ? <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.ltype}</p> : <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.stype}</p>}
+                        {primaryAircraft?.yom && <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.yom}</p>}
+                        {primaryAircraft?.operator && <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.operator}</p>}
+                    </div>
+                    <div className="flex flex-1 flex-row text-left justify-baseline">
                         <div className="flex-1 flex-col text-left">
                             <p className="text-[4vw] leading-none">{primaryAircraft?.dist} km</p>
                             <p className="text-[4vw] leading-none">{primaryAircraft?.gs} kt</p>
@@ -110,12 +114,10 @@ export default function AircraftInfo(){
                         </div>
                     </div>
                     {/* {storedAircraftData.aircraft.length > 0 ? <p>{storedAircraftData.aircraft[0].hex}</p> : <p></p>} */}
-                    {/* <button onClick={() => findAircraftInfo(storedAircraftData.aircraft[Object.keys(storedAircraftData.aircraft)[0]].hex)}>Log Aircraft Data</button> */}
+                    {/* <button onClick={() => console.log(storedAircraftData.aircraft)}>Log Aircraft Data</button> */}
                     {/* <p>Last Updated: {storedAircraftData.now.toLocaleTimeString()}</p> */}
                 </div>
-                {primaryAircraft.ltype ? <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.ltype}</p> : <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.stype}</p>}
-                {primaryAircraft.yom && <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.yom}</p>}
-                {primaryAircraft.operator && <p className="text-center text-sm text-gray-500 dark:text-gray-400">{primaryAircraft?.operator}</p>}
+                
 
             </div>}
         </div>

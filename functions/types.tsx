@@ -113,4 +113,6 @@ export type AircraftDataType = {
     yom?: number,
     /** the operator of the aircraft, as looked up from the hex code */
     operator?: string,
+    /** the registration of the aircraft, as looked up from the hex code */
+    registration?: string
 }
