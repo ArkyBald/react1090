@@ -19,7 +19,7 @@ export async function getAircraft() {
         alt_baro: 3625,
         alt_geom: 3625,
         gs: 123.3,
-        track: 67.6,
+        track: 0,
         baro_rate: 0,
         squawk: '1500',
         category: 'A7',

@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import Map, { MapRef, Marker, Source } from "react-map-gl/maplibre";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Map, { MapRef, Marker, Popup, Source } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
+const geomag = require("geomag");
 
 import { receiverLocation } from "./aircraftInfo";
 import { ADSBDataType, AircraftDataType } from "@/functions/types";
@@ -12,11 +13,21 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
     const [time, setTime] = useState(new Date());
     const mapRef = useRef<MapRef | null>(null);
 
-    const onMapLoad = useCallback(() => {
-        mapRef.current?.setBearing(receiverLocation.bearing as number + 26);
-        mapRef.current?.panBy([0, -200], {duration: 0});
-    }, []);
+    const angularDistance = 5/6371;
+    const receiverBearingRad = (receiverLocation.bearing as number + 26) * Math.PI / 180;
 
+    const receiverLatRad = receiverLocation.lat * Math.PI / 180;
+    const receiverLonRad = receiverLocation.lon * Math.PI / 180;
+
+    const mapLat = Math.asin   ((Math.sin(receiverLatRad) * Math.cos(angularDistance)) + 
+                                (Math.cos(receiverLatRad) * Math.sin(angularDistance) * Math.cos((receiverBearingRad)))) * 180 / Math.PI;
+
+    const mapLon = (receiverLonRad + Math.atan2( Math.sin(receiverBearingRad) * Math.sin(angularDistance) * Math.cos(receiverLatRad),
+                                                Math.cos(angularDistance) - (Math.sin(receiverLatRad) * Math.sin(mapLat)))) * 180 / Math.PI;
+
+
+    const declination = geomag.field(receiverLocation.lat, receiverLocation.lon).declination;
+    
     useEffect(() => {
         const interval = setInterval(() => {
             setTime(new Date());
@@ -29,16 +40,12 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
         <div>
             <Map
                 ref = {mapRef}
-                onLoad={onMapLoad}
-                initialViewState={{
-                    bounds: [
-                        receiverLocation.lon - 0.1, // West
-                        receiverLocation.lat - 0.1, // South
-                        receiverLocation.lon + 0.1, // East
-                        receiverLocation.lat + 0.1  // North
-                    ],
-                    // zoom: 20
-                }}
+                // onLoad={onMapLoad}
+                latitude={mapLat}
+                longitude={mapLon}
+                bearing={receiverLocation.bearing + declination}
+                zoom={11}
+                minZoom={10}
                 style={{width: "100vw", height: "100vh", borderRadius: "0.5rem"}}
                 mapStyle="https://api.maptiler.com/maps/dataviz-v4-dark/style.json?key=BhDT1UCr6jz4pV9uUNPc"
             >   
@@ -47,14 +54,20 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
                         key={aircraft.hex}
                         longitude={aircraft.lon as number}
                         latitude={aircraft.lat as number}
-                        rotationAlignment="map"
-                        // element={} // FIXME - this may be the appropraite method to set the plane icon
-                        rotation={aircraft.track as number - 45} // FIXME - this is a temporary fix to align the plane icon, but should be changed to use the actual bearing of the plane in future
+                        rotation={aircraft.track as number + declination - 45} // FIXME - this is a temporary fix to align the plane icon, but should be changed to use the actual bearing of the plane in future
                     >
-                        <div>
-                            <p>{"✈️" + aircraft.flight}</p>
-                            {/* <p>{aircraft.alt_baro} ft</p> */}
-                        </div>
+                        <p className="text-2xl">✈️</p>
+                        <Popup
+                            anchor="left"
+                            longitude={aircraft.lon as number}
+                            latitude={aircraft.lat as number}
+                            closeButton={false}
+                            closeOnClick={false}
+                            >
+                                <p>{aircraft.flight}</p>
+                                <p>{aircraft.alt_baro + "ft"}</p>
+
+                        </Popup>
                     </Marker>
                 ))}
             </Map>

@@ -82,7 +82,7 @@ export default function AircraftInfo(){
                     const aircraft = data.aircraft[i];
 
                     if (aircraft.hex === undefined) continue;
-                    if (aircraft.alt_baro === 'ground') continue;
+                    // if (aircraft.alt_baro === 'ground') continue;
 
                     if (!(aircraft.hex as string in storedAircraftData.aircraft)) {
                         newAircraftData.aircraft[aircraft.hex as string] = aircraft;
