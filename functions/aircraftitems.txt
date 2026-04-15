@@ -1,0 +1,114 @@
+✈️ Aircraft Viewing Screen Checklist
+🆔 Basic Identification (Top Priority)
+    Callsign (flight)
+    Registration / Tail number (registration)
+    ICAO Hex ID (hex)
+    Operator / Airline (operator)
+    Aircraft type – short (stype)
+    Aircraft type – full (ltype)
+    Year of manufacture (yom)
+📍 Position & Altitude
+    Latitude & Longitude (lat, lon)
+    Barometric altitude (alt_baro)
+    Geometric altitude (alt_geom)
+    On ground indicator (if alt_baro = "ground")
+    Distance from receiver (dist)
+🚀 Speed & Movement
+    Ground speed (gs)
+    Indicated airspeed (ias)
+    True airspeed (tas)
+    Mach number (mach)
+    Track / heading (track)
+    True heading (true_heading)
+    Magnetic heading (mag_heading)
+    Vertical rate (climb/descent) (baro_rate)
+    Geometric vertical rate (geom_rate)
+    Roll angle (roll)
+    Turn rate (track_rate)
+🧭 Navigation & Autopilot
+    Selected altitude (MCP) (nav_altitude_mcp)
+    Selected altitude (FMS) (nav_altitude_fms)
+    QNH / pressure setting (nav_qnh)
+    Active navigation modes (nav_modes)
+    Autopilot
+    VNAV
+    LNAV
+    Approach
+    Altitude hold
+    TCAS
+⚠️ Status & Alerts
+    Squawk code (squawk)
+    Emergency status (emergency)
+    General (7700)
+    Radio failure (7600)
+    Hijack (7500)
+    Alert flag (alert)
+    Special Position Indicator (SPI) (spi)
+    Priority score (priority)
+    📡 Signal & Data Quality
+    Signal strength (rssi)
+    Messages received (messages)
+    Time since last message (seen)
+    Time since last position (seen_pos)
+    Data Accuracy Indicators (Advanced)
+    NIC (integrity) (nic)
+    NACp (position accuracy) (nac_p)
+    NACv (velocity accuracy) (nac_v)
+    SIL (integrity level) (sil)
+    SIL type (sil_type)
+    GVA (vertical accuracy) (gva)
+    SDA (system assurance) (sda)
+    NIC baro (nic_baro)
+    Radius of containment (rc)
+🌬️ Environmental Data
+    Wind direction (wd)
+    Wind speed (ws)
+    Outside air temperature (oat)
+    Total air temperature (tat)
+🛰️ Data Source Indicators
+    ADS-B (primary)
+    MLAT positions (mlat)
+    TIS-B positions (tisb)
+    Transponder version (version)
+🌍 Extra Data You Could Source (Not in your schema)
+
+These are great for a richer UI and user experience:
+
+✈️ Flight Details
+    Departure airport
+    Arrival airport
+    Scheduled departure/arrival times
+    Flight status (en route, delayed, landed)
+    Route / flight path
+🏢 Airline & Branding
+    Airline name
+    Airline logo
+    Alliance (e.g., Star Alliance, Oneworld)
+    Country of operator
+🛩️ Aircraft Details
+    Manufacturer (e.g., Boeing, Airbus)
+    Aircraft model (e.g., A320-271N)
+    Aircraft age (derived from yom)
+    Engine type
+    Seating capacity
+🧑‍✈️ Operational Context
+    ATC region / FIR
+    Nearest airport
+    Current flight phase:
+    Taxi
+    Takeoff
+    Climb
+    Cruise
+    Descent
+    Approach
+    Landing
+🗺️ Map Enhancements
+    Trail/history path
+    Predicted path
+    Nearby aircraft
+    Airspace boundaries
+⚠️ Advanced / Enthusiast Data
+    Wake turbulence category (category)
+    Aircraft weight class
+    Registration history
+    Previous flights

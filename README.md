@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Installed Via : https://github.com/wiedehopf/adsb-scripts/wiki/Automatic-installation-for-readsb (uninstalled Dump1090-Fa Automatically)
 
 
+https://jxck-s.github.io/airline-logos/
 
 
 ## Personal Note

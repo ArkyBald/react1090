@@ -1,11 +1,11 @@
 "use server";
 
-import AircraftInfo from "@/components/aircraftInfo";
+import MapView from "@/components/mapView";
 import { AircraftDataType } from "@/functions/types";
 import { Suspense } from "react";
 
 export async function getAircraft() {
-  const data = await fetch("http://192.168.1.33/tar1090/data/aircraft.json");
+  const data = await fetch("http://192.168.1.40/tar1090/data/aircraft.json");
   const jsonData  = await data.json() as {now: number; messages: number; aircraft: []};
  
   const test = 
@@ -56,7 +56,7 @@ export default async function Home() {
   return (
       <main className="h-full min-h-screen w-full max-w-full items-center place-content-center-safe scroll-py-16 px-8 bg-white dark:bg-black">
         <Suspense fallback={<div>Loading...</div>}>
-          <AircraftInfo/>
+          <MapView/>
         </Suspense>
         
       </main>

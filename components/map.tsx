@@ -5,7 +5,7 @@ import Map, { MapRef, Marker, Popup, Source } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 const geomag = require("geomag");
 
-import { receiverLocation } from "./aircraftInfo";
+import { receiverLocation } from "./mapView";
 import { ADSBDataType, AircraftDataType } from "@/functions/types";
 
 
@@ -40,7 +40,6 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
         <div>
             <Map
                 ref = {mapRef}
-                // onLoad={onMapLoad}
                 latitude={mapLat}
                 longitude={mapLon}
                 bearing={receiverLocation.bearing + declination}
@@ -50,6 +49,8 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
                 mapStyle="https://api.maptiler.com/maps/dataviz-v4-dark/style.json?key=BhDT1UCr6jz4pV9uUNPc"
             >   
                 {props.aircraftData.aircraft && Object.values(props.aircraftData.aircraft).map((aircraft) => (
+                    aircraft.lat === undefined || aircraft.lon === undefined ? null :
+                    
                     <Marker
                         key={aircraft.hex}
                         longitude={aircraft.lon as number}
@@ -66,13 +67,12 @@ export default function MapScreen(props: {aircraftData: {now: Date; messages: nu
                             >
                                 <p>{aircraft.flight}</p>
                                 <p>{aircraft.alt_baro + "ft"}</p>
-
+                                <p>{aircraft.priority}</p>
                         </Popup>
                     </Marker>
                 ))}
             </Map>
-            <h1 suppressHydrationWarning className="absolute top-5/6 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">{time.toLocaleTimeString()}</h1>
-
+            <h1 suppressHydrationWarning className="absolute top-5/6 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-[#DCE1DE]">{time.toLocaleTimeString()}</h1>
         </div>
     );
 }

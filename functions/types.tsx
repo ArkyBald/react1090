@@ -115,4 +115,7 @@ export type AircraftDataType = {
     operator?: string,
     /** the registration of the aircraft, as looked up from the hex code */
     registration?: string
+    /** priority of the aircraft, as calculated when updated. Based on many factors */
+    priority?: number
+
 }
