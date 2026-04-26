@@ -1,6 +1,6 @@
 
 export type ADSBDataType = {
-    now: Date,
+    now: number,
     messages: number,
     aircraft: {[key : string] : AircraftDataType},
 }
@@ -92,9 +92,9 @@ export type AircraftDataType = {
     /** the signal strength of the messages received from the aircraft, in dBFS. */
     rssi?: number,
     /** alert status */
-    alert?: string,
+    alert?: number,
     /** special position identification status */
-    spi?: string,
+    spi?: number,
     /** wind direction */
     wd?: number,
     /** wind speed */
@@ -105,17 +105,28 @@ export type AircraftDataType = {
     tat?: number,
     /** distance from the receiver, as calculated at the receiver */
     dist?: number,
-    /** the shortened type of the aircraft, as looked up from the hex code */
-    stype?: string,
-    /** the long type of the aircraft, as looked up from the hex code */
-    ltype?: string,
-    /** the year of manufacture of the aircraft, as looked up from the hex code */
-    yom?: number,
-    /** the operator of the aircraft, as looked up from the hex code */
-    operator?: string,
-    /** the registration of the aircraft, as looked up from the hex code */
-    registration?: string
+    /** the shortened type of the aircraft, database */
+    t?: string,
+    /** the long type of the aircraft, database */
+    desc?: string,
+    /** the year of manufacture of the aircraft, database */
+    year?: string,
+    /** the operator of the aircraft, database */
+    ownOp?: string,
+    /** the registration of the aircraft, database */
+    r?: string,
+    /** bitfield of wether readsb things aircraft is interesting. Is capable of showing isMilitary, isInteresting, isPIA, isLADD*/
+    dbFlags? : number,
+    /** is this a military aircraft? found from DBFlags */
+    isMilitary? : boolean,
+    /** is this a Interesting aircraft? found from DBFlags */
+    isInteresting? : boolean,
+    /** is this a PIA aircraft? found from DBFlags */
+    isPIA? : boolean,
+    /** is this a LADD aircraft? found from DBFlags */
+    isLADD? : boolean,
     /** priority of the aircraft, as calculated when updated. Based on many factors */
-    priority?: number
-
+    priority: number,
+    /** time at which last set as primary aircraft (>1000 && highest priority) */
+    priorityTime : number
 }

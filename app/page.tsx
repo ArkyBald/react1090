@@ -5,7 +5,7 @@ import { AircraftDataType } from "@/functions/types";
 import { Suspense } from "react";
 
 export async function getAircraft() {
-  const data = await fetch("http://192.168.1.40/tar1090/data/aircraft.json");
+  const data = await fetch("http://192.168.200.249/tar1090/data/aircraft.json");
   const jsonData  = await data.json() as {now: number; messages: number; aircraft: []};
  
   const test = 
@@ -20,7 +20,7 @@ export async function getAircraft() {
         alt_geom: 3625,
         gs: 123.3,
         track: 0,
-        baro_rate: 0,
+        baro_rate: 1000,
         squawk: '1500',
         category: 'A7',
         lat: -46.40049743652344, 
@@ -54,7 +54,7 @@ export async function getAircraft() {
 
 export default async function Home() {
   return (
-      <main className="h-full min-h-screen w-full max-w-full items-center place-content-center-safe scroll-py-16 px-8 bg-white dark:bg-black">
+      <main className="h-full min-h-screen w-full max-w-full items-center place-content-center-safe scroll-py-16 bg-white dark:bg-black">
         <Suspense fallback={<div>Loading...</div>}>
           <MapView/>
         </Suspense>

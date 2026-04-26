@@ -6,6 +6,7 @@ Installed Via : https://github.com/wiedehopf/adsb-scripts/wiki/Automatic-install
 
 
 https://jxck-s.github.io/airline-logos/
+https://github.com/wiedehopf/tar1090-db
 
 
 ## Personal Note
@@ -14,6 +15,63 @@ Filepath for aircraft data on Pi is
     /run/dump1090-fa/aircraft.json
 
 The JSON feed to the server (on raspberry pi) is localhost:8080/data/aircraft.json
+
+{
+  "hex": "7c77f7",
+  "type": "adsb_icao",
+  "flight": "QFA123  ",
+  "r": "VH-XZD",
+  "t": "B738",
+  "desc": "BOEING 737-800",
+  "ownOp": "QANTAS AIRWAYS LIMITED",
+  "year": "2013",
+  "alt_baro": 1325,
+  "alt_geom": 1500,
+  "gs": 131.9,
+  "track": 252.8,
+  "geom_rate": -576,
+  "category": "A0",
+  "lat": -45.013962,
+  "lon": 168.773542,
+  "nic": 8,
+  "rc": 186,
+  "seen_pos": 0.117,
+  "r_dst": 3.554,
+  "r_dir": 80.6,
+  "version": 0,
+  "nac_p": 8,
+  "nac_v": 2,
+  "sil": 2,
+  "sil_type": "unknown",
+  "alert": 0,
+  "spi": 0,
+  "mlat": [],
+  "tisb": [],
+  "messages": 1135,
+  "seen": 0.1,
+  "rssi": -19.8,
+  "isInteresting": false,
+  "isPIA": false,
+  "isLADD": false,
+  "isMilitary": false,
+  "dist": 9.25,
+  "priority": 644.8966808914176,
+  "squawk": "1516",
+  "nav_qnh": 1018.2,
+  "nav_altitude_mcp": 9008,
+  "nav_altitude_fms": 1216,
+  "ias": 138,
+  "mach": 0.212,
+  "mag_heading": 227.29,
+  "true_heading": 252.52,
+  "baro_rate": -832,
+  "tas": 142,
+  "wd": 248,
+  "ws": 12,
+  "track_rate": 0.12,
+  "roll": 0.88,
+  "priorityTime": 1777194058
+}
 
 {
       hex: 'c821f8',

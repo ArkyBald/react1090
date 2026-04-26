@@ -32,7 +32,8 @@ body {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 10px !important;
+    padding: 4px !important;
+    width: 60 !important;
 }
 
 /* Make the popup tip transparent */
