@@ -1,12 +1,16 @@
 "use client";
 
 import { getAircraft } from "@/app/page";
-import { ADSBDataType, AircraftDataType } from "@/functions/types";
+import {
+  ADSBDataType,
+  AircraftDataType,
+  AircraftPositionTrace,
+} from "@/functions/types";
 import { useEffect, useState } from "react";
 import MapScreen from "./map";
 import SimpleAircraftData from "./aircraftDataScreens/simpleAircraftData";
-import { time } from "console";
 import DebugAircraftData from "./aircraftDataScreens/debugAircraftData";
+import ComplexAircraftData from "./aircraftDataScreens/complexAircraftData";
 
 function updateFromPartial<T>(oldData: T, newData: Partial<T>): T {
   return { ...oldData, ...newData };
@@ -93,7 +97,7 @@ export default function MapView() {
   );
 
   const [testAircraftData, setTestAircraftData] = useState({
-    now: new Date().valueOf(),
+    now: new Date().valueOf() / 1000,
     messages: 1,
     aircraft: {
       "7c77f7": {
@@ -135,7 +139,7 @@ export default function MapView() {
         isLADD: false,
         isMilitary: false,
         dist: 9.25,
-        priority: 644.8966808914176,
+        priority: 99999.8966808914176,
         squawk: "1516",
         nav_qnh: 1018.2,
         nav_altitude_mcp: 9008,
@@ -150,12 +154,13 @@ export default function MapView() {
         ws: 12,
         track_rate: 0.12,
         roll: 0.88,
-        priorityTime: 1777194058,
+        priorityTime: new Date().valueOf() / 1000,
       } as AircraftDataType,
     },
   } as ADSBDataType);
 
-  const aircraftPriorityThreshold = -100000;
+  const aircraftPriorityThreshold = 1000;
+  const aircraftTraceCount = 100;
 
   // Updates the aircraft JSON data every minute from the Raspberry Pi
   useEffect(() => {
@@ -182,10 +187,30 @@ export default function MapView() {
 
             if (!((aircraft.hex as string) in storedAircraftData.aircraft)) {
               newAircraftData.aircraft[aircraft.hex as string] = aircraft;
+              newAircraftData.aircraft[aircraft.hex as string].aircraftTrace =
+                [];
               console.log(
                 "New Aircraft Detected: " + aircraft.hex + ", " + aircraft.r,
               );
             } else {
+              // store the trace data also
+              if (!(aircraft.lat == undefined || aircraft.lon == undefined)) {
+                aircraft.aircraftTrace = [
+                  {
+                    baro_alt: aircraft.baro_rate,
+                    lat: aircraft.lat,
+                    lon: aircraft.lon,
+                    tas: aircraft.tas,
+                    time: storedAircraftData.now,
+                  } as AircraftPositionTrace,
+                  ...(storedAircraftData.aircraft[aircraft.hex as string]
+                    .aircraftTrace as AircraftPositionTrace[]),
+                ];
+                if (aircraft.aircraftTrace.length >= aircraftTraceCount) {
+                  aircraft.aircraftTrace.pop();
+                }
+              }
+              
               newAircraftData.aircraft[aircraft.hex as string] =
                 updateFromPartial(
                   storedAircraftData.aircraft[aircraft.hex as string],
@@ -227,7 +252,7 @@ export default function MapView() {
             ),
           );
 
-          if (Object.entries(data.aircraft).length <= 2)
+          if (Object.entries(data.aircraft).length <= 0)
             newAircraftData = testAircraftData;
 
           if (Object.entries(newAircraftData.aircraft).length > 0) {
@@ -250,8 +275,7 @@ export default function MapView() {
                 // If aircraft has been primary for greater than 2 seconds, or if we trump its priority two-fold, replace it.
                 if (
                   newAircraftData.now - primaryAircraft?.priorityTime > 2 ||
-                  potentialAircraft.priority > primaryAircraft.priority * 2 ||
-                  currentPrimaryAircraft == undefined
+                  potentialAircraft.priority > primaryAircraft.priority * 2
                 ) {
                   potentialAircraft.priorityTime = newAircraftData.now;
                   setPrimaryAircraft(potentialAircraft);
@@ -288,7 +312,6 @@ export default function MapView() {
             }
           }
 
-          console.log(Object.values(newAircraftData.aircraft)[0].priority);
           setStoredAircraftData(newAircraftData);
         },
       );
@@ -306,8 +329,9 @@ export default function MapView() {
         primaryAircraft={primaryAircraft}
       />
       {primaryAircraft !== undefined ? (
-        <div className="flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory">
+        <div className="flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory items-end">
           <SimpleAircraftData aircraft={primaryAircraft} />
+          <ComplexAircraftData aircraft={primaryAircraft} />
           <DebugAircraftData aircraft={primaryAircraft} />
         </div>
       ) : undefined}

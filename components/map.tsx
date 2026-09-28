@@ -1,14 +1,25 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Map, { MapRef, Marker, Popup, Source } from "react-map-gl/maplibre";
+import Map, {
+  Layer,
+  MapRef,
+  Marker,
+  Popup,
+  Source,
+} from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 const geomag = require("geomag");
 
 import { receiverLocation } from "./mapView";
-import { ADSBDataType, AircraftDataType } from "@/functions/types";
+import {
+  ADSBDataType,
+  AircraftDataType,
+  AircraftPositionTrace,
+} from "@/functions/types";
 import AircraftIcon from "./aircraftIcons";
 import airports from "../public/airport-coords.json";
+import AircraftDataPopup from "./mapMarkers/aircraftDataPopup";
 
 export default function MapScreen(props: {
   aircraftData: {
@@ -54,6 +65,29 @@ export default function MapScreen(props: {
     receiverLocation.lon,
   ).declination;
 
+  const lineStyle = {
+    id: "roadLayer",
+    type: "line",
+    layout: {
+      "line-join": "round",
+      "line-cap": "round",
+    },
+    paint: {
+      "line-color": [
+        "interpolate",
+        ["linear"],
+        ["get", "speed"],
+        0,
+        "#333333", // Low speed: Grey
+        500,
+        "#FFA500", // Mid speed: Orange
+        1000,
+        "#FF0000", // High speed: Red
+      ], //   "#888",
+      "line-width": 4,
+    },
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTime(new Date());
@@ -82,64 +116,41 @@ export default function MapScreen(props: {
                 rotationAlignment="map"
                 longitude={aircraft.lon as number}
                 latitude={aircraft.lat as number}
-                rotation={aircraft.track as number} // FIXME - this is a temporary fix to align the plane icon, but should be changed to use the actual bearing of the plane in future
+                rotation={aircraft.track as number}
               >
                 <AircraftIcon
                   category={aircraft.category as string}
                   type={aircraft.t || aircraft.desc}
                 />
-                <Popup
-                  anchor="left"
-                  longitude={aircraft.lon as number}
-                  latitude={aircraft.lat as number}
-                  closeButton={false}
-                  closeOnClick={false}
-                  offset={15}
-                  className="leading-none"
-                  style={{
-                    backgroundColor: "black",
-                    borderRadius: "0.5rem",
-                    fillOpacity: 0.5,
-                  }}
-                >
-                  {aircraft.flight && (
-                    <p
-                      className={
-                        (aircraft.priority > 1000 ? "font-bold" : "") +
-                        "text-[10px]"
-                      }
-                    >
-                      {aircraft.flight}
-                    </p>
-                  )}
-                  {aircraft.alt_baro && aircraft.alt_baro !== "ground" && (
-                    <p
-                      className={
-                        (aircraft.priority > 1000 ? "font-bold" : "") +
-                        "text-[10px]"
-                      }
-                    >
-                      {aircraft.alt_baro + "ft"}
-                    </p>
-                  )}
-                  {aircraft.t && (
-                    <p
-                      className={
-                        (aircraft.priority > 1000 ? "font-bold" : "") +
-                        "text-[10px]"
-                      }
-                    >
-                      {aircraft.priority +
-                        " " +
-                        (props.aircraftData.now - aircraft.priorityTime)}
-                    </p>
-                  )}
-                  {/* <p className={aircraft.priority > 1000 ? "font-bold" : ""}>{Math.round(aircraft.priority)}</p> */}
-                </Popup>
+                <AircraftDataPopup aircraftData={aircraft} />
               </Marker>
             ),
           )}
-        {Object.entries(airports)
+
+        {Object.values(props.aircraftData.aircraft).map((aircraft) => (
+          <Source
+            id={aircraft.hex}
+            key={aircraft.hex}
+            type="geojson"
+            data={{
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "LineString",
+                coordinates: Object.values(
+                  aircraft.aircraftTrace as AircraftPositionTrace[],
+                ).map((aircraftTrace, index) => [
+                  aircraftTrace.lon,
+                  aircraftTrace.lat,
+                ]),
+              },
+            }}
+          >
+            <Layer {...lineStyle} id={aircraft.hex} />
+          </Source>
+        ))}
+
+        {/* {Object.entries(airports)
           .filter((airportObject) => airportObject[0].startsWith("NZ"))
           .map((airportObject) => (
             <Marker
@@ -150,7 +161,7 @@ export default function MapScreen(props: {
             >
               <p>🛫 {airportObject[0]}</p>
             </Marker>
-          ))}
+          ))} */}
       </Map>
       <h1
         suppressHydrationWarning
@@ -161,3 +172,27 @@ export default function MapScreen(props: {
     </div>
   );
 }
+
+// {props.aircraftData.aircraft &&
+//           Object.values(props.aircraftData.aircraft).map((aircraft) =>
+//             aircraft.lat === undefined || aircraft.lon === undefined
+//               ? null
+//               : Object.values(
+//                   aircraft.aircraftTrace as AircraftPositionTrace[],
+//                 ).map((aircraftTrace, index) => (
+//                   <Marker
+//                     key={aircraft.hex + "_" + index}
+//                     rotationAlignment="map"
+//                     longitude={aircraftTrace.lon as number}
+//                     latitude={aircraftTrace.lat as number}
+//                     // rotation={aircraft.track as number}
+//                   >
+//                     {/* <AircraftIcon
+//                   category={aircraft.category as string}
+//                   type={aircraft.t || aircraft.desc}
+//                 />
+//                 <AircraftDataPopup aircraftData={aircraft} /> */}{" "}
+//                     .
+//                   </Marker>
+//                 )),
+//           )}

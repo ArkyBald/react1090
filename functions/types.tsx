@@ -128,5 +128,15 @@ export type AircraftDataType = {
     /** priority of the aircraft, as calculated when updated. Based on many factors */
     priority: number,
     /** time at which last set as primary aircraft (>1000 && highest priority) */
-    priorityTime : number
+    priorityTime : number,
+    /** array of previous positions, up to 20 scans long */
+    aircraftTrace? : AircraftPositionTrace[]
+}
+
+export type AircraftPositionTrace = {
+    lat: number,
+    lon: number,
+    baro_alt: number,
+    tas: number,
+    time: number,
 }
