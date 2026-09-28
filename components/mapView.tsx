@@ -29,7 +29,7 @@ export const receiverLocation = {
     bearing: 314,
     elevation: 5,
   },
-}.queenstown;
+}.crawford;
 
 function calculateAircraftPriority(aircraft: AircraftDataType): number {
   // Implementation for calculating aircraft priority based on various factors

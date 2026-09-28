@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import Map, {
   Layer,
   MapRef,
@@ -13,7 +14,6 @@ const geomag = require("geomag");
 
 import { receiverLocation } from "./mapView";
 import {
-  ADSBDataType,
   AircraftDataType,
   AircraftPositionTrace,
 } from "@/functions/types";
@@ -32,7 +32,7 @@ export default function MapScreen(props: {
   const [time, setTime] = useState(new Date());
   const mapRef = useRef<MapRef | null>(null);
 
-  const angularDistance = 10 / 6371;
+  const angularDistance = 5 / 6371;
   const receiverBearingRad =
     (((receiverLocation.bearing as number) + 26) * Math.PI) / 180;
 
@@ -66,7 +66,6 @@ export default function MapScreen(props: {
   ).declination;
 
   const lineStyle = {
-    id: "roadLayer",
     type: "line",
     layout: {
       "line-join": "round",
@@ -76,13 +75,22 @@ export default function MapScreen(props: {
       "line-color": [
         "interpolate",
         ["linear"],
-        ["get", "speed"],
+
+        ["line-progress"],
         0,
         "#333333", // Low speed: Grey
-        500,
+        0.5,
         "#FFA500", // Mid speed: Orange
-        1000,
+        1,
         "#FF0000", // High speed: Red
+
+        // ["get", "speed"],
+        // 0,
+        // "#333333", // Low speed: Grey
+        // 500,
+        // "#FFA500", // Mid speed: Orange
+        // 1000,
+        // "#FF0000", // High speed: Red
       ], //   "#888",
       "line-width": 4,
     },
@@ -106,8 +114,11 @@ export default function MapScreen(props: {
         zoom={10}
         minZoom={9}
         style={{ width: "100vw", height: "100vh", borderRadius: "0.5rem" }}
-        mapStyle="https://api.maptiler.com/maps/dataviz-v4-dark/style.json?key=BhDT1UCr6jz4pV9uUNPc"
+        mapStyle="https://tiles.openfreemap.org/styles/dark"
+        // mapStyle="https://api.maptiler.com/maps/dataviz-v4-dark/style.json?key=BhDT1UCr6jz4pV9uUNPc"
       >
+        
+        
         {props.aircraftData.aircraft &&
           Object.values(props.aircraftData.aircraft).map((aircraft) =>
             aircraft.lat === undefined || aircraft.lon === undefined ? null : (
@@ -132,19 +143,23 @@ export default function MapScreen(props: {
             id={aircraft.hex}
             key={aircraft.hex}
             type="geojson"
+            lineMetrics={true}
             data={{
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "LineString",
-                coordinates: Object.values(
-                  aircraft.aircraftTrace as AircraftPositionTrace[],
-                ).map((aircraftTrace, index) => [
-                  aircraftTrace.lon,
-                  aircraftTrace.lat,
-                ]),
-              },
-            }}
+              type: "FeatureCollection",
+              features: [
+                {type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "LineString",
+                  coordinates: Object.values(
+                    aircraft.aircraftTrace as AircraftPositionTrace[],
+                    ).map((aircraftTrace, index) => [
+                    aircraftTrace.lon,
+                    aircraftTrace.lat,
+                  ]),
+                  }
+                }],
+              }}
           >
             <Layer {...lineStyle} id={aircraft.hex} />
           </Source>
@@ -162,13 +177,40 @@ export default function MapScreen(props: {
               <p>🛫 {airportObject[0]}</p>
             </Marker>
           ))} */}
+        
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          
+          <h1
+            suppressHydrationWarning
+            className="
+              font-mono
+              font-bold
+              tabular-nums
+              tracking-[-0.065em]
+              leading-none
+              whitespace-nowrap
+              select-none
+
+              text-white/10
+
+              text-shadow-[-3px_-3px_-3px_rgba(255,255,255,0.1)]
+              text-shadow-[3px_3px_3px_rgba(0,0,0,0.1)]
+              text-shadow-[0_0_6px_rgba(0,0,0,0.1)]
+              
+              text-[clamp(5rem,11vw,10rem)]
+            "
+          >
+            {time.toLocaleTimeString()}
+          </h1>
+        </div>
       </Map>
-      <h1
+      {/* <h1
         suppressHydrationWarning
         className="absolute top-1/6 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-[#DCE1DE]"
       >
         {time.toLocaleTimeString()}
-      </h1>
+      </h1> */}
+      
     </div>
   );
 }
