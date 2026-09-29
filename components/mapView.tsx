@@ -329,7 +329,7 @@ export default function MapView() {
         primaryAircraft={primaryAircraft}
       />
       {primaryAircraft !== undefined ? (
-        <div className="flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory items-end">
+        <div className="flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory">
           <SimpleAircraftData aircraft={primaryAircraft} />
           <ComplexAircraftData aircraft={primaryAircraft} />
           <DebugAircraftData aircraft={primaryAircraft} />

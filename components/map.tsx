@@ -178,7 +178,7 @@ export default function MapScreen(props: {
             </Marker>
           ))} */}
         
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        {/* <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           
           <h1
             suppressHydrationWarning
@@ -202,7 +202,7 @@ export default function MapScreen(props: {
           >
             {time.toLocaleTimeString()}
           </h1>
-        </div>
+        </div> */}
       </Map>
       {/* <h1
         suppressHydrationWarning
