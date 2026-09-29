@@ -16,6 +16,9 @@ export async function getAircraft() {
       {
         hex: 'c82af1',
         flight: 'ZKIDH   ',
+        r: "ZKIDH",
+        desc: "heli",
+        t: "test",
         alt_baro: 3625,
         alt_geom: 3625,
         gs: 123.3,

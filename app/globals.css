@@ -21,6 +21,17 @@
   }
 }
 
+@layer base {
+  .font-indent-2 {
+    /* -webkit-text-stroke: 2px rgba(49, 49, 49, 0.1); */
+    text-shadow: (-1px_-1px_0px_rgba(255,255,255,0.1),_1px_1px_1px_rgba(0,0,0,0.8))
+  }
+  .font-outline-4 {
+    -webkit-text-stroke: 4px black;
+  }
+}
+
+
 body {
   background: var(--background);
   color: var(--foreground);
