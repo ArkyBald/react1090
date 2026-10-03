@@ -2,6 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import SimpleAircraftData from "./aircraftDataScreens/simpleAircraftData";
+import ComplexAircraftData from "./aircraftDataScreens/complexAircraftData";
+import DebugAircraftData from "./aircraftDataScreens/debugAircraftData";
+
 import Map, {
   Layer,
   MapRef,
@@ -32,7 +36,7 @@ export default function MapScreen(props: {
   const [time, setTime] = useState(new Date());
   const mapRef = useRef<MapRef | null>(null);
 
-  const angularDistance = 5 / 6371;
+  const angularDistance = 2 / 6371;
   const receiverBearingRad =
     (((receiverLocation.bearing as number) + 26) * Math.PI) / 180;
 
@@ -72,17 +76,18 @@ export default function MapScreen(props: {
       "line-cap": "round",
     },
     paint: {
-      "line-color": [
+      "line-gradient": [
         "interpolate",
         ["linear"],
 
         ["line-progress"],
+
         0,
-        "#333333", // Low speed: Grey
+        "#FF0000", // Recent record: Red
         0.5,
-        "#FFA500", // Mid speed: Orange
+        "#FFA500", // Mid record: Orange
         1,
-        "#FF0000", // High speed: Red
+        "#333333", // Old record: Grey
 
         // ["get", "speed"],
         // 0,
@@ -111,7 +116,7 @@ export default function MapScreen(props: {
         latitude={mapLat}
         longitude={mapLon}
         bearing={receiverLocation.bearing + declination}
-        zoom={10}
+        zoom={11}
         minZoom={9}
         style={{ width: "100vw", height: "100vh", borderRadius: "0.5rem" }}
         mapStyle="https://tiles.openfreemap.org/styles/dark"
@@ -178,11 +183,13 @@ export default function MapScreen(props: {
             </Marker>
           ))} */}
         
-        {/* <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        {(props.primaryAircraft) == undefined ? (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           
           <h1
             suppressHydrationWarning
             className="
+              z-1
               font-mono
               font-bold
               tabular-nums
@@ -202,7 +209,13 @@ export default function MapScreen(props: {
           >
             {time.toLocaleTimeString()}
           </h1>
-        </div> */}
+        </div>) : 
+        (<div className="z-1 flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory">
+          <SimpleAircraftData aircraft={props.primaryAircraft} />
+          <ComplexAircraftData aircraft={props.primaryAircraft} />
+          <DebugAircraftData aircraft={props.primaryAircraft} />
+        </div>)
+      }
       </Map>
       {/* <h1
         suppressHydrationWarning

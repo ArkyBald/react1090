@@ -19,6 +19,7 @@ export default function AircraftDataPopup(props: {
         backgroundColor: "black",
         borderRadius: "0.5rem",
         opacity: 0.5,
+        zIndex: 10,
       }}
     >
       {<p className={"text-[10px]"}>{aircraft.flight ? (aircraft.flight.includes("@") ? aircraft.r : aircraft.flight) : aircraft.r}</p>}

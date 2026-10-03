@@ -21,7 +21,7 @@ export default function SimpleAircraftData(props: {
 
   return (
     <DataScreen>
-      <div className="grid grid-rows-1 grid-cols-2 grid-flow-col gap-x-4 items-center">
+      <div className="z-1 grid grid-rows-1 grid-cols-2 grid-flow-col gap-x-4 items-center">
         {/* Aircraft Flight (ANZ432), or if this is blank or in error, the Registration (ZKMVP) */}
         <MajorText>
           {
@@ -35,7 +35,7 @@ export default function SimpleAircraftData(props: {
           {/* Aircraft Registration (ZKMVP), or if flight (ANZ432) is blank or the same as registration, distance? KM? FIXME update this to something better */}
           <SmallText>
             {
-              (aircraft.flight?.trim() == aircraft.r) || (aircraft.flight?.includes("@") || aircraft.flight == undefined)
+              !((aircraft.flight?.trim() == aircraft.r) || (aircraft.flight?.includes("@") || aircraft.flight == undefined))
               ? aircraft.r
               : aircraft.dist
             }

@@ -36,7 +36,7 @@ export default function AircraftIcon(props: {category: string, type?: string}) {
             }
 
     return (
-        <img src={iconSRC} alt={`${category} ${type}`} width={30 * iconSize} height={30 * iconSize} style={{ filter: dark }} />
+        <img src={iconSRC} alt={`${category} ${type}`} width={30 * iconSize} height={30 * iconSize} style={{ filter: dark, zIndex: 10 }}/>
     )
 
 }

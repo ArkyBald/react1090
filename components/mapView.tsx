@@ -29,7 +29,7 @@ export const receiverLocation = {
     bearing: 314,
     elevation: 5,
   },
-}.crawford;
+}.queenstown; // Change this to the desired receiver location
 
 function calculateAircraftPriority(aircraft: AircraftDataType): number {
   // Implementation for calculating aircraft priority based on various factors
@@ -160,7 +160,7 @@ export default function MapView() {
   } as ADSBDataType);
 
   const aircraftPriorityThreshold = 1000;
-  const aircraftTraceCount = 100;
+  const aircraftTraceCount = 20;
 
   // Updates the aircraft JSON data every minute from the Raspberry Pi
   useEffect(() => {
@@ -302,8 +302,7 @@ export default function MapView() {
                   potentialAircraft.priorityTime = newAircraftData.now;
                   setPrimaryAircraft(potentialAircraft);
                 } else if (
-                  newAircraftData.now - potentialAircraft.priorityTime >
-                  5
+                  newAircraftData.now - primaryAircraft.priorityTime > 5
                 ) {
                   // newAircraftData.aircraft[0].priorityTime = newAircraftData.now
                   setPrimaryAircraft(undefined);
@@ -328,13 +327,6 @@ export default function MapView() {
         aircraftData={storedAircraftData}
         primaryAircraft={primaryAircraft}
       />
-      {primaryAircraft !== undefined ? (
-        <div className="flex w-full flex-nowrap absolute bottom-0 left-0 overflow-x-scroll snap-x snap-mandatory">
-          <SimpleAircraftData aircraft={primaryAircraft} />
-          <ComplexAircraftData aircraft={primaryAircraft} />
-          <DebugAircraftData aircraft={primaryAircraft} />
-        </div>
-      ) : undefined}
     </div>
   );
 }
