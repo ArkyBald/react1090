@@ -169,19 +169,6 @@ export default function MapScreen(props: {
             <Layer {...lineStyle} id={aircraft.hex} />
           </Source>
         ))}
-
-        {/* {Object.entries(airports)
-          .filter((airportObject) => airportObject[0].startsWith("NZ"))
-          .map((airportObject) => (
-            <Marker
-              key={airportObject[0]}
-              rotationAlignment="viewport"
-              latitude={airportObject[1][0]}
-              longitude={airportObject[1][1]}
-            >
-              <p>🛫 {airportObject[0]}</p>
-            </Marker>
-          ))} */}
         
         {(props.primaryAircraft) == undefined ? (
           <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
@@ -214,16 +201,8 @@ export default function MapScreen(props: {
           <SimpleAircraftData aircraft={props.primaryAircraft} />
           <ComplexAircraftData aircraft={props.primaryAircraft} />
           <DebugAircraftData aircraft={props.primaryAircraft} />
-        </div>)
-      }
+        </div>)}
       </Map>
-      {/* <h1
-        suppressHydrationWarning
-        className="absolute top-1/6 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-full text-9xl font-semibold leading-10 tracking-tight text-black dark:text-[#DCE1DE]"
-      >
-        {time.toLocaleTimeString()}
-      </h1> */}
-      
     </div>
   );
 }
